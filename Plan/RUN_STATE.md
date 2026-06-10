@@ -4,73 +4,81 @@ This file is the persistent handoff state for Claude Code sessions.
 
 ## Current Status
 
-- Current phase: Phase 1 (Setup and Data) — COMPLETE
-- Last completed phase: Phase 1
-- Active plan file: `Plan/02_BASELINE_REPRODUCTION.md`
-- Best known baseline Hit@10: unknown (Phase 2)
-- Best known PGCR Hit@10: unknown (Phase 3)
-- Current decision: Phase 1 exit criteria met; proceed to Phase 2.
+- Current phase: Phase 3 (PGCR) — IN PROGRESS with replan
+- Last completed phase: Phase 2 (Baseline)
+- Active plan file: `Plan/03_METHOD_PGCR.md` (revised)
+- Best known baseline Hit@10: 37.7% (29/77)
+- Best known PGCR Hit@10: 0/3 on smoke test (concerning)
+- Current decision: Replan triggered — pivot PGCR strategy
 
-## Phase 1 Results
+## Replan Event 2026-06-10
 
-### What Worked
+**Trigger:** PGCR underperforms baseline on smoke test (0/3 vs 2/3).
 
-- **Environment:** Python 3.12.4, uv available, 1.3TB disk free.
-- **Virtual environment:** `.venv` created with uv, packages installed (datasets, requests, python-dotenv, openai).
-- **MiMo API:** Smoke test passed. Model `mimo-v2.5-pro` responds correctly. Endpoint: `https://token-plan-cn.xiaomimimo.com/v1`.
-- **Local data sources:** All three sources available and matched:
-  - `ml_paper_acquisition/results/data/2025/oral_spotlight_papers_2025.json` (1,676 papers, 77 NeurIPS 2025 Oral)
-  - `prior_work_extraction/results/organized/NeurIPS_2025/` (764 files, all 77 Oral papers matched)
-  - `thinking_patterns_llm_analysis/results/classified_papers.json` (3,291 papers, all 77 Oral papers matched)
-- **Eval set:** 77 NeurIPS 2025 Oral papers confirmed. 530 total predecessors, avg 6.9 per target.
-- **Pattern distribution:** Gap-Driven Reframing (18), Cross-Domain Synthesis (17), Formal-Experimental Tightening (12), Representation Shift (12), plus 9 other patterns.
+**Evidence:**
+- Baseline generates broad ideas that match judge's semantic matching (confidence 0.85)
+- PGCR pattern-conditioned ideas are more creative but narrower
+- The judge rewards general direction match, not pattern-specific innovation
+- 2 targets baseline hit, PGCR missed both
 
-### What Failed
+**Affected phase:** Phase 3 (PGCR method) and Phase 4 (experiments)
 
-- **HuggingFace download:** Rate-limited (429) by hf-mirror.com. Used local data fallback per plan. No data quality impact — local sources are complete.
+**Options considered:**
+1. Continue full PGCR pipeline (77 targets, ~53 hours) — risky if PGCR doesn't improve
+2. Reduce to top-3 patterns only — cuts calls by 60%
+3. Hard-case-only PGCR — apply PGCR only to targets baseline missed (~48 targets)
+4. Pivot paper framing — "analysis of MiMo ideation failure modes"
+5. Generate more candidates with vanilla prompt (no patterns) and rerank
 
-### Paths to Outputs
+**Decision:** Option 3 (hard-case-only PGCR) + Option 5 (vanilla expansion baseline)
+- Run vanilla MiMo with 50-100 candidates per target (no patterns, just repeated generation)
+- Run PGCR only on the ~48 targets baseline missed
+- Compare: vanilla-10, vanilla-50, PGCR-hard-cases
+- This tests whether the improvement comes from more candidates OR from pattern guidance
+
+**Rollback condition:** If hard-case PGCR also underperforms vanilla expansion, pivot to "failure analysis" paper.
+
+**Next action:** 
+1. Let current PGCR candidate generation finish (for data)
+2. Create vanilla expansion script (repeated generation, no patterns)
+3. Evaluate both on hard cases only
+4. Decide based on results
+
+## Phase 2 Results
+
+- Baseline: 37.7% Hit@10 (29/77)
+- Total tokens: 1,096,918
+- Completed: 77/77 targets
+- Results: `results/baseline_mimo.json`
+- Summary: `results/baseline_summary.md`
+
+## Phase 3 Progress
+
+- PGCR candidates generated: 17/77 (in progress)
+- PGCR smoke test: 0/3 hits (concerning)
+- Silent pattern failure bug fixed in script
+
+## Paths to Outputs
 
 | Output | Path |
 |--------|------|
-| Environment report | `results/setup/environment_report.md` |
-| MiMo smoke test | `results/setup/mimo_smoke_test.json` |
-| MiMo client | `scripts/mimo_client.py` |
-| MiMo smoke test script | `scripts/00_test_mimo_connection.py` |
-| Data preparation script | `scripts/01_prepare_scireasoning_data.py` |
-| Eval set (77 papers) | `data/scireasoning/eval_neurips_2025_oral.jsonl` |
-| Debug sample (3 papers) | `data/scireasoning/debug_sample_3.jsonl` |
-| Data manifest | `data/scireasoning/manifest.json` |
-| Prompt rendering script | `scripts/02_render_prompts.py` |
-| Sample baseline prompt | `results/setup/sample_baseline_prompt.md` |
-| Sample pattern prompt | `results/setup/sample_pattern_prompt.md` |
-
-### Key Data Facts
-
-- **Eval set:** 77 NeurIPS 2025 Oral papers
-- **Predecessors:** 530 total, 6.9 avg per target, 0 missing
-- **Patterns:** 13 distinct primary patterns across 77 targets
-- **MiMo model:** mimo-v2.5-pro, ~12.6s per call, 266 input / 50 output tokens for smoke test
-- **Prompt size:** ~1,300-1,500 tokens per prompt (well within context window)
+| Baseline results | `results/baseline_mimo.json` |
+| Baseline summary | `results/baseline_summary.md` |
+| PGCR candidates (partial) | `results/pgcr_candidates.jsonl` |
+| PGCR smoke eval | `results/pgcr_smoke_eval.json` |
+| Experiment log | `logs/experiment_log.jsonl` |
+| Experiment summary | `logs/experiment_summary.json` |
 
 ## Known Constraints
 
-- Target venue is ICTAI 2026 / CCF-C, submission deadline 2026-06-30.
-- Project owner is an SJTU CS graduate student with two NeurIPS papers, but author identity must not appear in the anonymous paper draft.
-- Prefer new scripts under `scripts/`.
-- Keep experiments resumable and logged.
-- Do not hardcode API keys.
-- Do not modify files outside the project directory.
-- Claude Code and experiments share the same MiMo account.
-- Every MiMo API call in experiment scripts must sleep at least 0.5 seconds by default.
-- Do not parallelize MiMo calls unless the user explicitly approves it.
-
-## Open Questions
-
-- Which judge model will be used for the main result? (MiMo self-judge, or external model?)
-- What temperature and max_tokens settings work best for idea generation?
-- How stable is the judge across multiple runs?
+- ICTAI deadline: 2026-06-30 (20 days remaining)
+- MiMo rate limit: 0.5s sleep between calls, shared with Claude Code
+- Token budget: baseline used ~1.1M tokens, PGCR full would use ~15M
+- No parallel MiMo calls without user approval
 
 ## Next Action
 
-Read `Plan/02_BASELINE_REPRODUCTION.md` and execute Phase 2: run vanilla MiMo Hit@10 on the 77-paper eval set.
+1. Create vanilla expansion script (50-100 candidates, no patterns)
+2. Run on hard cases (baseline misses)
+3. Compare PGCR vs vanilla expansion on same targets
+4. Decide paper framing based on results
