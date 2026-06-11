@@ -23,7 +23,7 @@
 \maketitle
 
 \begin{abstract}
-Large language models (LLMs) can generate research ideas from predecessor papers, but direct generation typically produces a small, narrow set of candidates. We study whether generating more candidates and selecting the best ones improves the Hit@10 metric on the Sci-Reasoning benchmark. Using MiMo as the base model, we compare three approaches: (1) vanilla generation of 10 ideas, (2) candidate expansion generating 50 ideas with score-based selection, and (3) pattern-guided candidate expansion using innovation patterns from Sci-Reasoning. On the NeurIPS 2025 Oral evaluation set (77 papers), vanilla generation achieves 37.7\% Hit@10, while candidate expansion on hard cases (targets missed by vanilla) recovers an additional 33.3\%, yielding a combined 58.4\% Hit@10. We also analyze the relationship between innovation patterns and prediction difficulty, finding that Representation Shift patterns are most predictable (50\%) while Cross-Domain Synthesis patterns are least predictable (29.4\%). Our results suggest that simple candidate expansion is an effective baseline for scientific ideation, and that pattern-guided approaches require careful calibration to be beneficial.
+Large language models (LLMs) can generate research ideas from predecessor papers, but direct generation typically produces a small, narrow set of candidates. We study whether generating more candidates and selecting the best ones improves the Hit@10 metric on the Sci-Reasoning benchmark. Using MiMo as the base model, we compare three approaches: (1) vanilla generation of 10 ideas, (2) candidate expansion generating 50 ideas with score-based selection, and (3) pattern-guided candidate expansion using innovation patterns from Sci-Reasoning. On the NeurIPS 2025 Oral evaluation set (77 papers), vanilla generation achieves 37.7\% Hit@10, while candidate expansion on hard cases (targets missed by vanilla) recovers an additional 33.3\%, yielding a combined 58.4\% Hit@10. Surprisingly, pattern-guided candidate expansion (PGCR) achieves only 28.6\% Hit@10---lower than the vanilla baseline---suggesting that pattern conditioning narrows the candidate space in ways that hurt recall. We also analyze the relationship between innovation patterns and prediction difficulty, finding that Representation Shift patterns are most predictable (50\%) while Cross-Domain Synthesis patterns are least predictable (29.4\%). Our results suggest that simple candidate expansion is an effective baseline for scientific ideation, and that pattern-guided approaches require careful calibration to be beneficial.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -135,15 +135,16 @@ We use the Sci-Reasoning NeurIPS 2025 Oral evaluation set, consisting of 77 pape
 \begin{center}
 \begin{tabular}{lccc}
 \toprule
-Method & Candidates & Hit@10 & Improvement \\
+Method & Candidates & Hit@10 & $\Delta$ \\
 \midrule
 Vanilla MiMo & 10 & 37.7\% & -- \\
+PGCR (pattern-guided) & $\sim$80 & 28.6\% & $-$9.1pp \\
 + Expansion (hard cases) & 50 & 33.3\%* & +20.7pp \\
 \textbf{Combined} & 10+50 & \textbf{58.4\%} & \textbf{+20.7pp} \\
 \bottomrule
 \end{tabular}
 \end{center}
-\footnotesize{*Hard cases only: 48 targets missed by vanilla. Combined = vanilla on easy cases + expansion on hard cases.}
+\footnotesize{*Hard cases only: 48 targets missed by vanilla. Combined = vanilla on easy cases + expansion on hard cases. PGCR uses pattern-conditioned generation with reranking.}
 \end{table}
 
 \subsection{Pattern Predictability Analysis}
@@ -191,9 +192,20 @@ PGCR Scoring & 1.7M+ & 14+ \\
 
 The key insight is that scientific idea generation has high variance: a single generation call may miss the correct research direction. By generating 5 candidates and selecting the best, we increase the probability of hitting the target.
 
+\subsection{Why PGCR Underperforms}
+
+Pattern-guided candidate expansion (PGCR) achieves only 28.6\% Hit@10, lower than the vanilla baseline (37.7\%). We attribute this to two factors:
+
+\begin{enumerate}
+    \item \textbf{Pattern conditioning narrows the candidate space.} By constraining generation to specific innovation patterns, PGCR produces ideas that are more creative but less likely to match the broad research direction of the target paper.
+    \item \textbf{The judge rewards direction matching, not creativity.} The Sci-Reasoning judge evaluates whether a generated idea captures the same research direction as the target paper. Pattern-specific ideas may be technically interesting but miss the general direction.
+\end{enumerate}
+
+This finding suggests that for the Hit@10 metric, candidate diversity is more important than pattern-specific creativity.
+
 \subsection{Pattern Predictability}
 
-Different innovation patterns have different predictability from predecessors. Representation Shift ideas (replacing core primitives) are more predictable because they directly extend predecessor limitations. Cross-Domain Synthesis ideas (importing from other fields) are less predictable because the connection to other domains is harder to infer.
+Different innovation patterns have different predictability from predecessors. Representation Shift ideas (replacing core primitives) are more predictable because they directly extend predecessor limitations. Cross-Domain Synthesis ideas (importing from other fields) are less predictable because the connection to other domains is harder to infer. This variation in predictability may explain why pattern conditioning hurts overall performance: some patterns (like Cross-Domain Synthesis) generate ideas that are inherently harder to predict from predecessors.
 
 \subsection{Limitations}
 
@@ -205,7 +217,7 @@ Different innovation patterns have different predictability from predecessors. R
 
 \section{Conclusion}
 
-We show that simple candidate expansion significantly improves Hit@10 on the Sci-Reasoning benchmark, from 37.7\% to 58.4\%. This suggests that the bottleneck in scientific idea generation is not the quality of individual ideas but the diversity of the candidate set. We also find that innovation pattern predictability varies dramatically, with Representation Shift patterns being most predictable and Cross-Domain Synthesis patterns being least predictable.
+We show that simple candidate expansion significantly improves Hit@10 on the Sci-Reasoning benchmark, from 37.7\% to 58.4\%. This suggests that the bottleneck in scientific idea generation is not the quality of individual ideas but the diversity of the candidate set. Surprisingly, pattern-guided candidate expansion (PGCR) underperforms the vanilla baseline (28.6\% vs.\ 37.7\%), indicating that pattern conditioning narrows the search space in ways that reduce recall. We also find that innovation pattern predictability varies dramatically, with Representation Shift patterns being most predictable (50\%) and Cross-Domain Synthesis patterns being least predictable (29.4\%). These findings suggest that future work should focus on improving candidate diversity rather than constraining generation with pattern-specific prompts.
 
 \begin{thebibliography}{00}
 
