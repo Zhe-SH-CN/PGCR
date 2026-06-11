@@ -4,12 +4,14 @@ This file is the persistent handoff state for Claude Code sessions.
 
 ## Current Status
 
-- Current phase: Phase 3 (PGCR) — IN PROGRESS with replan
+- Current phase: Phase 3-4 (Experiments) — IN PROGRESS
 - Last completed phase: Phase 2 (Baseline)
-- Active plan file: `Plan/03_METHOD_PGCR.md` (revised)
-- Best known baseline Hit@10: 37.7% (29/77)
-- Best known PGCR Hit@10: 0/3 on smoke test (concerning)
-- Current decision: Replan triggered — pivot PGCR strategy
+- Active plan file: `Plan/04_EXPERIMENTS_AND_ABLATIONS.md`
+- Best known baseline Hit@10: 37.7% (29/77, 10 candidates)
+- Best known vanilla expansion Hit@10: 33.3% (16/48, hard cases, 50 candidates)
+- Best known combined Hit@10: 58.4% (45/77)
+- PGCR scoring: 14/77 in progress
+- Current decision: Prepare paper with current results, update when PGCR finishes
 
 ## Replan Event 2026-06-10
 
