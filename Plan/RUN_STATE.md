@@ -4,14 +4,14 @@ This file is the persistent handoff state for Claude Code sessions.
 
 ## Current Status
 
-- Current phase: Phase 3-4 (Experiments) — IN PROGRESS
-- Last completed phase: Phase 2 (Baseline)
-- Active plan file: `Plan/04_EXPERIMENTS_AND_ABLATIONS.md`
+- Current phase: Phase 5 (Paper Writing) — IN PROGRESS
+- Last completed phase: Phase 4 (Experiments)
+- Active plan file: `Plan/05_PAPER_WRITING.md`
 - Best known baseline Hit@10: 37.7% (29/77, 10 candidates)
+- Best known PGCR Hit@10: 28.6% (22/77, pattern-guided, ~80 candidates)
 - Best known vanilla expansion Hit@10: 33.3% (16/48, hard cases, 50 candidates)
 - Best known combined Hit@10: 58.4% (45/77)
-- PGCR scoring: 14/77 in progress
-- Current decision: Prepare paper with current results, update when PGCR finishes
+- Current decision: Paper draft complete, ready for final review
 
 ## Replan Event 2026-06-10
 
@@ -46,13 +46,39 @@ This file is the persistent handoff state for Claude Code sessions.
 3. Evaluate both on hard cases only
 4. Decide based on results
 
-## Phase 2 Results
+## Final Experiment Results
 
-- Baseline: 37.7% Hit@10 (29/77)
-- Total tokens: 1,096,918
-- Completed: 77/77 targets
-- Results: `results/baseline_mimo.json`
-- Summary: `results/baseline_summary.md`
+### Main Results
+
+| Method | Candidates | Hit@10 | Improvement |
+|--------|-----------|--------|-------------|
+| Vanilla MiMo | 10 | 37.7% (29/77) | — |
+| PGCR (pattern-guided) | ~80 | 28.6% (22/77) | -9.1pp |
+| Vanilla Expansion (hard cases) | 50 | 33.3% (16/48) | — |
+| **Combined** | 10+50 | **58.4% (45/77)** | **+20.7pp** |
+
+### Key Finding
+
+**Pattern conditioning HURTS performance.** PGCR (28.6%) < Baseline (37.7%). Simple candidate expansion HELPS performance. Combined (58.4%) >> Baseline (37.7%).
+
+### Pattern Predictability
+
+| Pattern | Hits | Total | Hit@10 |
+|---------|------|-------|--------|
+| Representation Shift | 6 | 12 | 50.0% |
+| Formal-Experimental | 5 | 12 | 41.7% |
+| Gap-Driven Reframing | 6 | 18 | 33.3% |
+| Cross-Domain Synthesis | 5 | 17 | 29.4% |
+
+### Token Usage
+
+| Method | Tokens | Targets |
+|--------|--------|---------|
+| Baseline | 1.1M | 77 |
+| PGCR Generation | ~2M | 77 |
+| PGCR Scoring | ~5M | 77 |
+| Vanilla Expansion | 1.0M | 48 |
+| Vanilla Scoring | 4.2M | 48 |
 
 ## Phase 3 Progress
 
@@ -66,8 +92,16 @@ This file is the persistent handoff state for Claude Code sessions.
 |--------|------|
 | Baseline results | `results/baseline_mimo.json` |
 | Baseline summary | `results/baseline_summary.md` |
-| PGCR candidates (partial) | `results/pgcr_candidates.jsonl` |
-| PGCR smoke eval | `results/pgcr_smoke_eval.json` |
+| PGCR candidates | `results/pgcr_candidates.jsonl` |
+| PGCR scored | `results/pgcr_scored.jsonl` |
+| PGCR top-10 | `results/pgcr_top10.jsonl` |
+| PGCR evaluation | `results/pgcr_full.json` |
+| Vanilla expansion | `results/vanilla_expansion_hard.jsonl` |
+| Vanilla scored | `results/vanilla_scored_hard.jsonl` |
+| Vanilla evaluation | `results/vanilla_expansion_eval.json` |
+| Paper draft | `paper/main.tex` |
+| References | `paper/references.bib` |
+| Submission checklist | `paper/submission_checklist.md` |
 | Experiment log | `logs/experiment_log.jsonl` |
 | Experiment summary | `logs/experiment_summary.json` |
 
