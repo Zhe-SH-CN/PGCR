@@ -32,7 +32,7 @@ Pick one framing after Phase 4:
 
 ### Improvement Paper
 
-Use if full-set BCS beats direct baseline clearly.
+Use if full-set BCS or SE-BCS beats direct baseline clearly.
 
 Claim:
 
@@ -74,6 +74,7 @@ Include exactly:
 
 - task: generating scientific ideas from predecessor papers,
 - method: target-hidden candidate expansion and selection,
+- if available, lightweight structured/evolutionary candidate search,
 - benchmark: Sci-Reasoning NeurIPS 2025 Oral subset,
 - main result: Direct-10 vs BCS full-set result,
 - negative finding: PGCR/pattern conditioning underperforms if still true,
@@ -98,6 +99,10 @@ Contributions:
 2. A fair full-set evaluation on Sci-Reasoning with enriched target contributions.
 3. A budget/selection analysis showing when more candidates help or fail.
 4. A negative result on pattern-conditioned generation.
+
+If SE-BCS wins, add:
+
+5. A lightweight structured/evolutionary variant that borrows graph-style context compression and crossover/mutation without full KG, RL, or heavy iterative search infrastructure.
 
 ### 2. Background and Task
 
@@ -127,8 +132,11 @@ Define:
 Subsections:
 
 - Candidate generation.
+- Structured predecessor compression, if SE-BCS is used.
+- Crossover and mutation candidate generation, if SE-BCS is used.
 - Target-hidden scoring.
 - Diversity-aware selection.
+- Anti-mirage selection diagnostics.
 - Baseline-preserving mixture, if used.
 - Computational cost.
 
@@ -158,6 +166,7 @@ Use tables generated in Phase 4.
 Required discussion:
 
 - full-set Direct-10 vs BCS-50,
+- SE-BCS-50 if available,
 - BCS-100 budget curve if available,
 - PGCR negative ablation,
 - selection ablations,
@@ -185,6 +194,10 @@ Minimum topics:
 - Sci-Reasoning and scientific ideation benchmarks,
 - LLM-based research idea generation,
 - candidate generation/reranking/search,
+- graph-structured scientific ideation such as Graph2Idea,
+- evolutionary or iterative ideation such as FlowPIE and Nova,
+- controllable ideation such as LDC,
+- evaluation-bias work such as RQ-Bench and human expert studies,
 - self-consistency and sampling budgets,
 - LLM-as-judge evaluation and its limitations,
 - AI for science / automated research agents if space permits.

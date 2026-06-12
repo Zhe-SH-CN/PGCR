@@ -25,7 +25,9 @@ Build a lightweight, reproducible ACML submission around MiMo-based scientific i
 
 The old PGCR-positive claim is rejected by current evidence. The current working method is BCS: Budgeted Candidate Search. PGCR is a negative ablation.
 
-Read `results/acml_readiness_audit.md`, `Plan/00_BIG_PLAN.md`, `Plan/10_PLAN_AUDIT_ACML_READINESS.md`, `Plan/RUN_STATE.md`, `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`, `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`, and the active phase plan named in `Plan/RUN_STATE.md` before doing new work.
+External search found nearby work such as Graph2Idea, FlowPIE, Nova, LDC, SCI-IDEA, RQ-Bench, SciAidanBench, and Future-Aligned Proposal Prediction. Do not claim that "generating more candidates" alone is novel. The defensible angle is a lightweight, leakage-controlled, fixed-output-budget Sci-Reasoning Hit@10 study, with a structured/evolutionary BCS variant only if it can be completed without heavy infrastructure.
+
+Read `results/acml_readiness_audit.md`, `Plan/00_BIG_PLAN.md`, `Plan/10_PLAN_AUDIT_ACML_READINESS.md`, `research/current_acml_idea_2026-06-12.md`, `research/deep_research_sci_reasoning_2026-06-12.md`, `Plan/RUN_STATE.md`, `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`, `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`, and the active phase plan named in `Plan/RUN_STATE.md` before doing new work.
 
 `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md` is an operating guide to read before Phase 1. It is not a later stage that delays Claude Code involvement.
 
@@ -39,7 +41,15 @@ git@github.com:Zhe-SH-CN/PGCR.git
 
 If the lab-server project folder is not already a Git repository, initialize Git inside that project folder only and set this remote as `origin`. Do not commit or push API keys, `.env`, `.venv`, `.uv-cache`, logs containing secrets, private paths, or generated caches.
 
-Commit at phase boundaries after the phase exit criteria pass. Push only reproducible code, plans, anonymized paper files, and result artifacts that do not contain secrets.
+At every phase or major experiment boundary, after exit criteria pass:
+
+1. run the relevant audit/checklist,
+2. update `Plan/RUN_STATE.md`,
+3. scan staged files for secrets, local private paths, `.env`, API keys, `.venv`, `.uv-cache`, and generated caches,
+4. commit,
+5. push to `origin`.
+
+Push only reproducible code, plans, anonymized paper files, and result artifacts that do not contain secrets.
 
 ## Ground Truth Priority
 
@@ -74,7 +84,7 @@ Use sources in this order:
 ## Automation Rules
 
 - Before a long run, run a 1-3 item smoke test.
-- At startup, check whether Superpowers and planning-with-files skills are installed. Use them if available; continue with the local `Plan/` workflow if they are missing.
+- At startup, check whether Superpowers and planning-with-files skills are installed. If installed, they must be used throughout the workflow: Superpowers for execute-plan, systematic debugging, and code review; planning-with-files for read-before-decide and file-based planning. If missing, record the missing skill in `Plan/RUN_STATE.md` and continue with the local `Plan/` workflow rather than pretending it was used.
 - Do not stop for ordinary missing optional data, minor format ambiguity, or recoverable API failures; choose the smallest documented fallback, log it, and continue.
 - Ask the user only for secrets, system-level changes, access outside the project directory, destructive deletion beyond generated caches, parallel MiMo execution, fine-tuning, full KG construction, or a major research-scope change.
 - Every long-running script must support `--resume`.
@@ -135,11 +145,22 @@ Model roles:
 
 The plan is dynamic but bounded.
 
+Use `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md` as the reflection and replanning mechanism. During long automation, do not wait until the end of all experiments to reflect. Reflect at every major part:
+
+- Phase 1 protocol/data repair,
+- Direct-10 enriched rejudge,
+- BCS-50 full run,
+- SE-BCS-50 full run or skip decision,
+- Phase 3 robustness,
+- Phase 4 tables/analysis,
+- Phase 5 paper draft/compile.
+
 When changing the plan, update `Plan/RUN_STATE.md` with:
 
 - trigger
 - evidence
 - decision
+- insufficiency or risk
 - rollback condition
 - next action
 

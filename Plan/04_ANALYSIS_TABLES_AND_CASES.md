@@ -18,6 +18,7 @@ Rows:
 
 - Direct-10 baseline,
 - BCS-50,
+- SE-BCS-50 if available,
 - BCS-100 if available,
 - PGCR negative ablation,
 - strongest non-oracle ablation.
@@ -120,9 +121,34 @@ Analyze:
 - generated ideas too broad,
 - selection discards correct direct idea,
 - expansion increases diversity but hurts precision,
+- structured extraction introduces wrong or over-compressed context,
+- crossover/mutation creates plausible but source-bound ideas,
 - target depends on hidden author insight,
 - judge threshold inconsistency,
 - pattern conditioning narrows recall.
+
+## Related-Work Pressure Tests
+
+Create:
+
+- `results/related_work_positioning.md`
+
+Explicitly compare against:
+
+- Graph2Idea: structured graph contexts,
+- FlowPIE: MCTS/evolutionary test-time idea search,
+- Nova: iterative planning and search,
+- LDC: controllable generation through SFT/RL,
+- SCI-IDEA: embedding/facet-based ideation metrics,
+- RQ-Bench and the human ideation study: LLM judge and novelty-evaluation risks.
+
+For each, state:
+
+- what it does,
+- why this project is lighter,
+- what was borrowed,
+- what was intentionally avoided,
+- whether the claim must be weakened.
 
 ## Leakage and Integrity Audit
 
@@ -144,6 +170,6 @@ Phase 4 is complete when:
 
 - all tables are generated from JSON/JSONL files,
 - case studies and error analysis exist,
+- related-work positioning exists,
 - protocol integrity audit passes,
 - the final paper claim is selected based on evidence.
-

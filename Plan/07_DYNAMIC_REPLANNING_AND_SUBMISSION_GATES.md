@@ -37,8 +37,32 @@ Every change must be recorded in `Plan/RUN_STATE.md` with:
 - trigger,
 - evidence,
 - decision,
+- insufficiency or risk,
 - rollback condition,
 - next action.
+
+## Reflection Cadence
+
+Claude Code must reflect before continuing at every major part boundary:
+
+- Phase 1 protocol/data repair,
+- Direct-10 enriched rejudge,
+- BCS-50 full run,
+- SE-BCS-50 full run or skip decision,
+- Phase 3 robustness,
+- Phase 4 tables/analysis,
+- Phase 5 paper draft/compile.
+
+At each reflection point:
+
+1. Compare current evidence against `research/current_acml_idea_2026-06-12.md`.
+2. Compare related-work risk against `research/deep_research_sci_reasoning_2026-06-12.md`.
+3. Record what is weak, missing, contradictory, or likely not ACML-level.
+4. Decide whether to continue, run SE-BCS, weaken the claim, pivot, or stop.
+5. Update `Plan/RUN_STATE.md`.
+6. After exit criteria pass, commit and push to `origin`.
+
+This reflection must happen during experimentation, not only after all experiments finish.
 
 ## Replanning Triggers
 
@@ -106,4 +130,3 @@ Before submission, verify:
 - no fake citations,
 - no oracle result as main method,
 - `paper/acml_submission_checklist.md` is fully checked.
-

@@ -25,6 +25,10 @@ Working method:
 
 **BCS: Budgeted Candidate Search.**
 
+External-research refinement:
+
+**SE-BCS: Structured-Evolutionary Budgeted Candidate Search** is a lightweight optional/improved variant inspired by Graph2Idea, FlowPIE, Nova, and RQ-Bench. It adds compact predecessor structure extraction, cheap crossover/mutation candidates, and anti-mirage diversity checks, while preserving target-hidden generation and exactly 10 final ideas.
+
 Working title:
 
 **Budgeted Candidate Search for Scientific Idea Generation**
@@ -32,6 +36,10 @@ Working title:
 Core claim to test:
 
 > Given predecessor papers only, target-hidden candidate expansion plus quality/diversity selection improves Sci-Reasoning Hit@10 over direct generation under a fair fixed-output protocol, while pattern-conditioned generation is a negative ablation.
+
+Updated novelty boundary after web and NotebookLM research:
+
+> Do not frame the contribution as candidate expansion in general. Related work already explores graph-structured contexts, iterative search, controllable generation, and evolutionary ideation. The ACML contribution must be framed as a controlled Sci-Reasoning Hit@10 study that isolates fixed-output candidate search under leakage constraints, plus lightweight structured/evolutionary ablations.
 
 Current evidence:
 
@@ -58,10 +66,12 @@ Read these files in order:
 2. `results/acml_readiness_audit.md`
 3. `Plan/00_BIG_PLAN.md`
 4. `Plan/10_PLAN_AUDIT_ACML_READINESS.md`
-5. `Plan/RUN_STATE.md`
-6. `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`
-7. `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`
-8. Current active phase plan from `Plan/RUN_STATE.md`
+5. `research/current_acml_idea_2026-06-12.md`
+6. `research/deep_research_sci_reasoning_2026-06-12.md`
+7. `Plan/RUN_STATE.md`
+8. `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`
+9. `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`
+10. Current active phase plan from `Plan/RUN_STATE.md`
 
 Claude Code starts at Phase 1. `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md` and `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md` are cross-phase operating guides to read up front, not late stages that require manual completion of earlier phases.
 
@@ -84,6 +94,7 @@ Execution phases and support documents:
 - Generation, scoring, selection, and budget allocation must not see target title or target contribution.
 - Judge prompts may see target title and contribution only after final ideas are selected.
 - Fill target contributions before any ACML-grade rejudging.
+- SE-BCS structure extraction, crossover, mutation, and anti-mirage selection must also remain target-hidden.
 - Do not tune selection parameters on all 77 targets without labeling the result exploratory.
 - Use `uv` with a project-local `.venv`; run project Python scripts through `.venv/bin/python` after setup.
 - Every MiMo API call must sleep at least 0.5 seconds.

@@ -12,7 +12,9 @@ The current BCS idea is not yet proven to be ACML-level. It is a plausible ACML 
 
 The current experiment quantity is not enough for ACML. Existing results are useful for diagnosis, but the submission needs the planned full-set BCS runs, enriched judging, ablations, robustness checks, and statistical analysis.
 
-The plan is structurally complete after this audit: it covers environment setup, data repair, full experiments, robustness, analysis, ACML paper writing, automation rules, dynamic replanning, and submission gates.
+External research on 2026-06-12 found Graph2Idea, FlowPIE, Nova, LDC, SCI-IDEA, RQ-Bench, SciAidanBench, and Future-Aligned Proposal Prediction as important adjacent work. This weakens any broad novelty claim around "generating more candidates" and strengthens the need to frame the project as a controlled Sci-Reasoning Hit@10 budget/selection study. The plan now includes SE-BCS, a lightweight structured/evolutionary BCS variant, as an optional improved method.
+
+The plan is structurally complete after this audit: it covers environment setup, data repair, full experiments, robustness, analysis, ACML paper writing, automation rules, dynamic replanning, external-work positioning, and submission gates.
 
 ## Requirement-to-Evidence Map
 
@@ -21,6 +23,7 @@ The plan is structurally complete after this audit: it covers environment setup,
 | Use a `uv` virtual environment | `CLAUDE.md`, `Plan/00_BIG_PLAN.md`, `Plan/01_PROTOCOL_AND_DATA_REPAIR.md`, `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`, and `Plan/09_CLAUDE_START_PROMPT_ACML.md` require `uv`, project-local `.venv`, and `.venv/bin/python`. |
 | Judge whether the idea is ACML-level | This file states BCS is not yet proven ACML-level; `Plan/00_BIG_PLAN.md` defines the submission bar; `Plan/02_FAIR_BCS_EXPERIMENTS.md` and `Plan/03_REPLICATION_AND_ROBUSTNESS.md` define the evidence needed. |
 | Judge whether experiment quantity is enough | This file says current experiments are insufficient; the minimum evidence package below lists missing full-set BCS, budget, ablation, robustness, statistics, and case-study requirements. |
+| Account for external related work | `research/deep_research_sci_reasoning_2026-06-12.md` records NotebookLM and web research; `Plan/02`, `Plan/04`, and `Plan/05` now include SE-BCS and related-work pressure tests. |
 | Include reflection and dynamic adjustment | `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md` defines triggers, pivots, submit/weak-submit/stop gates, and required `Plan/RUN_STATE.md` update fields. |
 | Cover the full path from current data to paper | `Plan/01` repairs data, `Plan/02` runs fair experiments, `Plan/03` adds robustness, `Plan/04` generates evidence tables/cases, and `Plan/05` writes and compiles the paper. |
 | Use the official ACML LaTeX template | `CLAUDE.md`, `Plan/00`, `Plan/05`, `Plan/09`, and this file require starting from `ACML_camera_ready/acml26_submission_template.tex` and `ACML_camera_ready/jmlr.cls`. |
@@ -43,6 +46,7 @@ A credible ACML submission needs at least:
 
 - Direct-10 baseline rejudged on the enriched 77-target file.
 - BCS-50 on all 77 targets under target-hidden generation, scoring, selection, and budget allocation.
+- SE-BCS-50 on all 77 targets, or an explicit `Plan/RUN_STATE.md` note explaining why it was skipped.
 - One budget curve point such as BCS-100 or a cheaper BCS-25/50/100 curve if tokens allow.
 - Selection ablations, for example random selection, quality-only, diversity-only, and quality-plus-diversity.
 - PGCR reported only as a negative or failed ablation unless corrected experiments overturn the current result.

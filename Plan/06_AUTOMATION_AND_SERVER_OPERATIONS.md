@@ -14,10 +14,12 @@ Claude Code should read:
 2. `results/acml_readiness_audit.md`
 3. `Plan/00_BIG_PLAN.md`
 4. `Plan/10_PLAN_AUDIT_ACML_READINESS.md`
-5. `Plan/RUN_STATE.md`
-6. this file
-7. `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`
-8. active phase plan from `Plan/RUN_STATE.md`
+5. `research/current_acml_idea_2026-06-12.md`
+6. `research/deep_research_sci_reasoning_2026-06-12.md`
+7. `Plan/RUN_STATE.md`
+8. this file
+9. `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`
+10. active phase plan from `Plan/RUN_STATE.md`
 
 ## Server Safety
 
@@ -56,10 +58,20 @@ Rules:
 
 - initialize Git only inside the project folder if needed,
 - set the remote as `origin`,
-- commit at phase boundaries after exit criteria pass,
+- commit and push at every phase or major experiment boundary after exit criteria pass,
 - do not commit `.env`, API keys, `.venv`, `.uv-cache`, private keys, secrets, or generated caches,
 - run a secret/path scan before pushing,
 - do not force-push unless the user explicitly asks.
+
+Major boundaries:
+
+- Phase 1 protocol/data repair,
+- Direct-10 enriched rejudge,
+- BCS-50 full run,
+- SE-BCS-50 full run or skip decision,
+- Phase 3 robustness,
+- Phase 4 tables/analysis,
+- Phase 5 paper draft/compile.
 
 ## Python Environment
 
@@ -127,12 +139,17 @@ Preferred output locations:
 
 ## Claude Skills
 
-Check at startup whether these skills are installed. Use them if available, but do not block if they are missing:
+Check at startup whether these skills are installed. If installed, use them; if missing, record the missing skill in `Plan/RUN_STATE.md` and continue with the local `Plan/` workflow:
 
 - Superpowers: execute-plan, systematic debugging, code review.
 - planning-with-files: read-before-decide discipline.
 
-If not installed, continue with the local `Plan/` workflow.
+Do not merely mention these skills. Use them for the relevant work:
+
+- Superpowers execute-plan: before each phase or major experiment.
+- Superpowers systematic debugging: when scripts fail, outputs conflict, or results are unexpectedly weak.
+- Superpowers code review: before phase completion and before commit/push.
+- planning-with-files: before major decisions, write or update the relevant `Plan/`, `research/`, or `results/` file instead of relying on chat memory.
 
 ## Context Management
 
@@ -142,6 +159,7 @@ At the end of every session:
 - summarize exact output paths,
 - record next phase,
 - record blockers,
+- record reflection against `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`,
 - do not paste huge logs into chat.
 
 When context gets large:
