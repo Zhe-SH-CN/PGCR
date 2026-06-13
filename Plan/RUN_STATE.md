@@ -77,16 +77,23 @@ This directly triggers the replanning mechanism per `Plan/07_DYNAMIC_REPLANNING_
 
 **Rollback condition:** If SE-BCS-50 also fails, the project should pivot to a negative-result / analysis paper.
 
-**Decision:** Try SE-BCS-50 as a last attempt. If it also fails, pivot to negative-result paper.
+**Decision:** Pivot to negative-result paper. SE-BCS-50 skipped because:
+- BCS-50 was clearly negative (20.8% vs 26.0%)
+- The overlap analysis is strong enough for a negative-result paper
+- ACML deadline is 2026-06-26 (13 days), need time for paper writing
+- SE-BCS-50 would take 3-5 days to implement and run, with uncertain payoff
 
-**Rollback condition:** If SE-BCS-50 does not beat Direct-10 by ≥5pp, pivot to:
-> "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+**Rollback condition:** If the negative-result paper analysis is not strong enough, consider SE-BCS-50 as a last resort.
 
 **Next action:**
-1. Implement SE-BCS-50 (structured predecessor extraction + crossover/mutation + anti-mirage selection).
-2. Run SE-BCS-50 on all 77 targets.
-3. If SE-BCS-50 beats Direct-10: proceed with improvement paper.
-4. If SE-BCS-50 does not beat Direct-10: pivot to negative-result paper with enriched judging + BCS/Direct overlap analysis.
+1. Write the negative-result paper from the ACML template.
+2. Paper title: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+3. Key findings:
+   - Enriched judging is significantly stricter than title-only judging (26.0% vs 37.7%)
+   - BCS-50 does not beat Direct-10 (20.8% vs 26.0%)
+   - BCS-50 and Direct-10 find mostly different targets (only 5/31 overlap)
+   - Pattern-conditioned generation (PGCR) also fails
+4. Run PGCR enriched rejudge to confirm PGCR is also negative under enriched judging.
 
 ## Possible Pivot Framing
 
