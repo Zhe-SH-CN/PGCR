@@ -5,11 +5,11 @@ This file is the persistent handoff state for Claude Code sessions.
 ## Current Status
 
 - Target venue: ACML 2026 Conference Track.
-- Current phase: **Phase 2 COMPLETE — Paper draft written**.
+- Current phase: **Paper draft COMPLETE — ready for review**.
 - Active plan file: `Plan/05_ACML_PAPER_WRITING.md` (paper refinement).
 - GitHub remote: `git@github.com:Zhe-SH-CN/PGCR.git`.
-- Last completed work: Paper draft "When More Ideas Do Not Help" (2026-06-13).
-- Current decision: Refine paper, verify citations, prepare for submission.
+- Last completed work: Paper draft "When More Ideas Do Not Help" (8 pages, 2026-06-13).
+- Current decision: Paper ready for review and refinement.
 - Skills: Superpowers and planning-with-files confirmed installed by user.
 
 ## Complete Results (enriched judging)
@@ -33,16 +33,36 @@ This file is the persistent handoff state for Claude Code sessions.
 
 - Title: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
 - Format: ACML/JMLR template (`paper/acml_main.tex`)
-- Length: 6 pages
+- Length: 8 pages (under 16-page limit)
 - Status: Draft compiles cleanly, needs citation verification and content review
 
-## Next Steps
+## What's Done
 
-1. Verify all citations are real (no fabricated references).
-2. Check paper against ACML submission checklist.
-3. Add more detailed analysis if needed (case studies, failure modes).
-4. Ensure anonymization is complete.
-5. Prepare submission materials.
+### Phase 1: Protocol and Data Repair
+- Enriched eval data: 77/77 non-empty contributions
+- Resume accounting fixed in baseline and eval scripts
+- ACML results audit script created
+- All Phase 1 exit criteria met
+
+### Phase 2: Fair BCS Experiments
+- Direct-10 enriched rejudge: 77/77, 20 hits, 26.0%
+- BCS-50 generation: 77/77 targets, 50 candidates each
+- BCS-50 scoring/selection: 77/77 targets
+- BCS-50 evaluation: 77/77, 16 hits, 20.8%
+- PGCR enriched rejudge: 77/77, 14 hits, 18.2%
+
+### Paper Draft
+- ACML/JMLR format, 8 pages
+- Negative-result framing with enriched judging analysis
+- Case studies and failure mode analysis
+- Detailed appendix with prompts, tokens, CIs
+
+## What's Missing / Could Be Improved
+
+1. **Citation verification** — some references are anonymous placeholders
+2. **Judge robustness** — no second judge or cross-model replication
+3. **More detailed analysis** — could add more case studies
+4. **Reviewer nomination** — need to handle ACML requirement
 
 ## Output Paths
 
@@ -53,6 +73,8 @@ This file is the persistent handoff state for Claude Code sessions.
 ### Results
 - `results/acml_direct10_rejudge_mimo_v25pro.json` (20 hits, 26.0%)
 - `results/bcs50_eval_mimo_v25pro.json` (16 hits, 20.8%)
+- `results/bcs50_candidates_mimo_v25pro.jsonl` (77/77 candidates)
+- `results/bcs50_selected_mimo_v25pro.jsonl` (77/77 selected)
 - `results/pgcr_enriched_eval.json` (14 hits, 18.2%)
 - `results/acml_results_audit.json` (complete audit)
 - `results/acml_results_audit.md` (readable audit)
@@ -62,15 +84,25 @@ This file is the persistent handoff state for Claude Code sessions.
 - `scripts/13_acml_results_audit.py` (audit)
 - `scripts/14_direct10_rejudge.py` (rejudge)
 - `scripts/15_bcs_evaluate.py` (BCS evaluation)
+- `scripts/mimo_client.py` (MiMo API client with timeout)
 
 ### Paper
-- `paper/acml_main.tex` (main paper)
+- `paper/acml_main.tex` (main paper, 8 pages)
 - `paper/references.bib` (references)
+
+## Next Steps
+
+1. Verify citations are real (especially anonymous ones for related work).
+2. Check paper against ACML submission checklist.
+3. Add more detailed analysis if needed.
+4. Ensure anonymization is complete.
+5. Handle reviewer nomination requirement.
+6. Prepare submission materials.
 
 ## Blockers
 
-- Need to verify citations are real (especially anonymous ones for related work).
-- Paper is only 6 pages — may need more content for ACML (16 page limit).
+- Need to verify citations are real (especially anonymous ones).
+- Paper is 8 pages — could add more content if needed.
 - Need to check if reviewer nomination requirement is met.
 
 ## Required Read Order (for next session)
