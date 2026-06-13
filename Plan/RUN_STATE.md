@@ -48,13 +48,45 @@ This directly triggers the replanning mechanism per `Plan/07_DYNAMIC_REPLANNING_
 - SE-BCS-50 could potentially help (structured/evolutionary approach), but the base BCS result suggests the problem may be deeper than candidate diversity.
 - The enriched judging is stricter (26.0% vs 37.7% title-only), which is itself a finding worth reporting.
 
+### BCS-50 vs Direct-10 Overlap Analysis
+
+**Key finding: BCS-50 and Direct-10 find mostly DIFFERENT targets.**
+
+| Metric | Value |
+|---|---|
+| Direct-10 hits | 20 |
+| BCS-50 hits | 16 |
+| Common hits | 5 |
+| Only in Direct-10 | 15 |
+| Only in BCS-50 | 11 |
+| BCS-50 hits on Direct-10 misses | 11 |
+| BCS-50 loses Direct-10 hits | 15 |
+
+**Interpretation:**
+- Only 5 out of 31 total hits overlap between the two methods.
+- BCS-50 finds 11 targets that Direct-10 misses, but loses 15 that Direct-10 hits.
+- This means candidate expansion substantially changes which ideas are generated.
+- But the net effect is negative: the loss of 15 Direct-10 hits outweighs the 11 new hits.
+- Judge confidence is nearly identical: hit_mean ~0.868 for both methods.
+
+**Implication for paper:**
+- The finding that BCS and Direct find different targets is interesting and reportable.
+- It suggests that more candidates don't just add noise — they shift the entire distribution.
+- But the shift is not consistently beneficial.
+- This is a strong negative-result finding for an analysis paper.
+
 **Rollback condition:** If SE-BCS-50 also fails, the project should pivot to a negative-result / analysis paper.
 
-**Next action:** 
-1. Run the ACML audit script to get updated results table.
-2. Check if BCS-50 helps on specific target subsets (maybe helps on hard targets but hurts on easy ones).
-3. Consider running SE-BCS-50 as a last attempt.
-4. If SE-BCS-50 also fails, pivot to: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+**Decision:** Try SE-BCS-50 as a last attempt. If it also fails, pivot to negative-result paper.
+
+**Rollback condition:** If SE-BCS-50 does not beat Direct-10 by ≥5pp, pivot to:
+> "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+
+**Next action:**
+1. Implement SE-BCS-50 (structured predecessor extraction + crossover/mutation + anti-mirage selection).
+2. Run SE-BCS-50 on all 77 targets.
+3. If SE-BCS-50 beats Direct-10: proceed with improvement paper.
+4. If SE-BCS-50 does not beat Direct-10: pivot to negative-result paper with enriched judging + BCS/Direct overlap analysis.
 
 ## Possible Pivot Framing
 
