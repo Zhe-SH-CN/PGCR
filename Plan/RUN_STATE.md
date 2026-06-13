@@ -5,154 +5,73 @@ This file is the persistent handoff state for Claude Code sessions.
 ## Current Status
 
 - Target venue: ACML 2026 Conference Track.
-- Current phase: **Phase 2 COMPLETE — CRITICAL NEGATIVE RESULT**.
-- Active plan file: `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md` (replanning triggered).
+- Current phase: **Phase 2 COMPLETE — Paper draft written**.
+- Active plan file: `Plan/05_ACML_PAPER_WRITING.md` (paper refinement).
 - GitHub remote: `git@github.com:Zhe-SH-CN/PGCR.git`.
-- Last completed work: Phase 2 BCS-50 full evaluation (2026-06-13).
-- Current decision: **REPLAN TRIGGERED** — BCS-50 does not beat Direct-10.
+- Last completed work: Paper draft "When More Ideas Do Not Help" (2026-06-13).
+- Current decision: Refine paper, verify citations, prepare for submission.
 - Skills: Superpowers and planning-with-files confirmed installed by user.
 
-## Phase 2 Final Results
+## Complete Results (enriched judging)
 
-### Main Results Table (enriched judging)
+| Method | Hits | Total | Hit@10 | 95% CI | Status |
+|---|---:|---:|---:|---|---|
+| Direct-10 (enriched) | 20 | 77 | 26.0% | [16.9, 36.4] | baseline |
+| BCS-50 | 16 | 77 | 20.8% | [11.7, 29.9] | negative |
+| PGCR (enriched) | 14 | 77 | 18.2% | [10.4, 27.3] | negative |
+| Direct-10 (title-only) | 29 | 77 | 37.7% | [27.3, 48.1] | overestimated |
 
-| Method | Target set | Hits | Total | Hit@10 | Tokens | Status |
-|---|---|---:|---:|---:|---:|---|
-| Direct-10 rejudge (enriched) | full | 20 | 77 | 26.0% | 810,522 | baseline |
-| BCS-50 (score+diversity) | full | 16 | 77 | 20.8% | 853,688 | main method |
-| PGCR | full | 22 | 77 | 28.6% | — | old judging, needs rejudge |
-| MiMo v2.5-pro (old title-only) | full | 29 | 77 | 37.7% | — | title-only judging |
+## Key Findings
 
-### Critical Finding
+1. **Enriched judging is dramatically stricter** — 26.0% vs 37.7% title-only (11.7pp drop).
+2. **BCS-50 does not beat Direct-10** — 20.8% vs 26.0% (5.2pp worse).
+3. **PGCR also fails** — 18.2% under enriched judging.
+4. **BCS and Direct find different targets** — only 5/31 hits overlap.
+5. **Judge confidence is well-calibrated** — hit mean ~0.868, miss mean ~0.048.
 
-**BCS-50 (20.8%) does NOT beat Direct-10 (26.0%).** BCS-50 is 5.2pp LOWER than the baseline.
+## Paper Status
 
-This directly triggers the replanning mechanism per `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`:
-> "Replan if: BCS-50 does not beat Direct-10"
+- Title: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+- Format: ACML/JMLR template (`paper/acml_main.tex`)
+- Length: 6 pages
+- Status: Draft compiles cleanly, needs citation verification and content review
 
-### Replanning Analysis
+## Next Steps
 
-**Trigger:** BCS-50 does not beat Direct-10 on the full 77-target set.
-
-**Evidence:**
-- Direct-10 enriched: 20/77 = 26.0%
-- BCS-50: 16/77 = 20.8%
-- BCS-50 is 5.2pp WORSE than Direct-10
-
-**Decision:** Per `Plan/07`, this triggers pivot or stop.
-
-**Insufficiency/Risk:**
-- The core BCS hypothesis (more candidates → better Hit@10) is not supported by the data.
-- PGCR was already negative (28.6% with old judging, but needs enriched rejudge to confirm).
-- BCS-50 is also negative.
-- SE-BCS-50 could potentially help (structured/evolutionary approach), but the base BCS result suggests the problem may be deeper than candidate diversity.
-- The enriched judging is stricter (26.0% vs 37.7% title-only), which is itself a finding worth reporting.
-
-### BCS-50 vs Direct-10 Overlap Analysis
-
-**Key finding: BCS-50 and Direct-10 find mostly DIFFERENT targets.**
-
-| Metric | Value |
-|---|---|
-| Direct-10 hits | 20 |
-| BCS-50 hits | 16 |
-| Common hits | 5 |
-| Only in Direct-10 | 15 |
-| Only in BCS-50 | 11 |
-| BCS-50 hits on Direct-10 misses | 11 |
-| BCS-50 loses Direct-10 hits | 15 |
-
-**Interpretation:**
-- Only 5 out of 31 total hits overlap between the two methods.
-- BCS-50 finds 11 targets that Direct-10 misses, but loses 15 that Direct-10 hits.
-- This means candidate expansion substantially changes which ideas are generated.
-- But the net effect is negative: the loss of 15 Direct-10 hits outweighs the 11 new hits.
-- Judge confidence is nearly identical: hit_mean ~0.868 for both methods.
-
-**Implication for paper:**
-- The finding that BCS and Direct find different targets is interesting and reportable.
-- It suggests that more candidates don't just add noise — they shift the entire distribution.
-- But the shift is not consistently beneficial.
-- This is a strong negative-result finding for an analysis paper.
-
-**Rollback condition:** If SE-BCS-50 also fails, the project should pivot to a negative-result / analysis paper.
-
-**Decision:** Pivot to negative-result paper. SE-BCS-50 skipped because:
-- BCS-50 was clearly negative (20.8% vs 26.0%)
-- The overlap analysis is strong enough for a negative-result paper
-- ACML deadline is 2026-06-26 (13 days), need time for paper writing
-- SE-BCS-50 would take 3-5 days to implement and run, with uncertain payoff
-
-**Rollback condition:** If the negative-result paper analysis is not strong enough, consider SE-BCS-50 as a last resort.
-
-**Next action:**
-1. Write the negative-result paper from the ACML template.
-2. Paper title: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
-3. Key findings:
-   - Enriched judging is significantly stricter than title-only judging (26.0% vs 37.7%)
-   - BCS-50 does not beat Direct-10 (20.8% vs 26.0%)
-   - BCS-50 and Direct-10 find mostly different targets (only 5/31 overlap)
-   - Pattern-conditioned generation (PGCR) also fails
-4. Run PGCR enriched rejudge to confirm PGCR is also negative under enriched judging.
-
-## Possible Pivot Framing
-
-If BCS and SE-BCS both fail, the paper becomes:
-
-**Title:** "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
-
-**Story:**
-- We test whether generating more candidates and selecting quality/diversity improves Sci-Reasoning Hit@10.
-- Under enriched judging, direct generation (26.0%) outperforms BCS-50 (20.8%).
-- Pattern-conditioned generation (PGCR) also fails.
-- Enriched judging is significantly stricter than title-only judging (26.0% vs 37.7%).
-- This reveals fundamental limitations of candidate expansion for scientific ideation.
-
-This is still ACML-worthy if the analysis is clean and the negative result is well-structured.
-
-## Phase 1 Completed Work
-
-- Enriched eval data: 77/77 non-empty contributions
-- Resume accounting fixed in baseline and eval scripts
-- ACML results audit script created
-- All Phase 1 exit criteria met
-
-## Phase 2 Completed Work
-
-- Direct-10 enriched rejudge: 77/77, 20 hits, 26.0%
-- BCS-50 generation: 77/77 targets, 50 candidates each
-- BCS-50 scoring/selection: 77/77 targets
-- BCS-50 evaluation: 77/77, 16 hits, 20.8%
+1. Verify all citations are real (no fabricated references).
+2. Check paper against ACML submission checklist.
+3. Add more detailed analysis if needed (case studies, failure modes).
+4. Ensure anonymization is complete.
+5. Prepare submission materials.
 
 ## Output Paths
 
-### Phase 1
-- `data/scireasoning/eval_neurips_2025_oral_enriched.jsonl`
+### Data
+- `data/scireasoning/eval_neurips_2025_oral_enriched.jsonl` (77 records, enriched)
 - `data/scireasoning/enrichment_report.md`
-- `scripts/13_acml_results_audit.py`
-- `results/acml_results_audit.json`
-- `results/acml_results_audit.md`
 
-### Phase 2
-- `scripts/14_direct10_rejudge.py`
+### Results
 - `results/acml_direct10_rejudge_mimo_v25pro.json` (20 hits, 26.0%)
-- `results/bcs50_candidates_mimo_v25pro.jsonl` (77/77)
-- `results/bcs50_selected_mimo_v25pro.jsonl` (77/77)
 - `results/bcs50_eval_mimo_v25pro.json` (16 hits, 20.8%)
+- `results/pgcr_enriched_eval.json` (14 hits, 18.2%)
+- `results/acml_results_audit.json` (complete audit)
+- `results/acml_results_audit.md` (readable audit)
 
-## Next Action
+### Scripts
+- `scripts/12_enrich_eval_data.py` (enrichment)
+- `scripts/13_acml_results_audit.py` (audit)
+- `scripts/14_direct10_rejudge.py` (rejudge)
+- `scripts/15_bcs_evaluate.py` (BCS evaluation)
 
-1. Run ACML audit script to update results table.
-2. Analyze BCS-50 vs Direct-10 overlap: which targets does BCS help/hurt?
-3. Decide: SE-BCS-50 attempt, or pivot to negative-result paper.
-4. Update `Plan/RUN_STATE.md` with decision.
-5. Commit and push.
+### Paper
+- `paper/acml_main.tex` (main paper)
+- `paper/references.bib` (references)
 
 ## Blockers
 
-- BCS-50 does not beat Direct-10 — replanning required.
-- ACML deadline is 2026-06-26 AoE (13 days from now).
-- Need to decide quickly: SE-BCS-50 attempt or pivot.
+- Need to verify citations are real (especially anonymous ones for related work).
+- Paper is only 6 pages — may need more content for ACML (16 page limit).
+- Need to check if reviewer nomination requirement is met.
 
 ## Required Read Order (for next session)
 
@@ -165,4 +84,4 @@ This is still ACML-worthy if the analysis is clean and the negative result is we
 7. `Plan/RUN_STATE.md` (this file)
 8. `Plan/06_AUTOMATION_AND_SERVER_OPERATIONS.md`
 9. `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`
-10. `Plan/02_FAIR_BCS_EXPERIMENTS.md`
+10. `Plan/05_ACML_PAPER_WRITING.md`
