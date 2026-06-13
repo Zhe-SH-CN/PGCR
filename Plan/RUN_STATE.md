@@ -5,47 +5,71 @@ This file is the persistent handoff state for Claude Code sessions.
 ## Current Status
 
 - Target venue: ACML 2026 Conference Track.
-- Current phase: **Phase 2 IN PROGRESS** — BCS-50 scoring running.
-- Active plan file: `Plan/02_FAIR_BCS_EXPERIMENTS.md`.
+- Current phase: **Phase 2 COMPLETE — CRITICAL NEGATIVE RESULT**.
+- Active plan file: `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md` (replanning triggered).
 - GitHub remote: `git@github.com:Zhe-SH-CN/PGCR.git`.
-- Last completed work: Phase 1 + Phase 2a (Direct-10 rejudge) + Phase 2b (BCS-50 generation).
-- Current decision: BCS-50 scoring/selection running overnight (~2/77 done as of 23:52 CST).
-- External research update: plain candidate expansion is not enough as a novelty claim. Prefer the controlled Sci-Reasoning Hit@10 story, with SE-BCS as a lightweight structured/evolutionary variant if Phase 2 budget allows.
+- Last completed work: Phase 2 BCS-50 full evaluation (2026-06-13).
+- Current decision: **REPLAN TRIGGERED** — BCS-50 does not beat Direct-10.
 - Skills: Superpowers and planning-with-files confirmed installed by user.
 
-## Phase 2 Progress
+## Phase 2 Final Results
 
-### Phase 2a: Direct-10 Enriched Rejudge — COMPLETE
-- Script: `scripts/14_direct10_rejudge.py`
-- Output: `results/acml_direct10_rejudge_mimo_v25pro.json`
-- Result: 77/77 targets, 20 hits, **26.0% Hit@10** (enriched contributions)
-- Previous (title-only): 29 hits, 37.7% — enriched judging is stricter
-- Tokens: 810,522
+### Main Results Table (enriched judging)
 
-### Phase 2b: BCS-50 Generation — COMPLETE
-- Script: `scripts/10_vanilla_expansion.py` (5 batches × 10 ideas = 50 candidates/target)
-- Output: `results/bcs50_candidates_mimo_v25pro.jsonl`
-- Result: 77/77 targets generated
-- Last 2 targets used 3 batches instead of 5 due to API timeout issues
+| Method | Target set | Hits | Total | Hit@10 | Tokens | Status |
+|---|---|---:|---:|---:|---:|---|
+| Direct-10 rejudge (enriched) | full | 20 | 77 | 26.0% | 810,522 | baseline |
+| BCS-50 (score+diversity) | full | 16 | 77 | 20.8% | 853,688 | main method |
+| PGCR | full | 22 | 77 | 28.6% | — | old judging, needs rejudge |
+| MiMo v2.5-pro (old title-only) | full | 29 | 77 | 37.7% | — | title-only judging |
 
-### Phase 2c: BCS-50 Scoring/Selection — IN PROGRESS
-- Script: `scripts/11_score_and_select_vanilla.py`
-- Output: `results/bcs50_selected_mimo_v25pro.jsonl`
-- Progress: ~2/77 targets scored as of 23:52 CST
-- Expected completion: ~12 hours (overnight run)
+### Critical Finding
 
-### Phase 2d: BCS-50 Evaluation — NOT STARTED
-- Script: `scripts/15_bcs_evaluate.py`
-- Output: `results/bcs50_eval_mimo_v25pro.json`
+**BCS-50 (20.8%) does NOT beat Direct-10 (26.0%).** BCS-50 is 5.2pp LOWER than the baseline.
 
-## Current Evidence
+This directly triggers the replanning mechanism per `Plan/07_DYNAMIC_REPLANNING_AND_SUBMISSION_GATES.md`:
+> "Replan if: BCS-50 does not beat Direct-10"
 
-| Method | Target set | Hits | Total | Hit@10 | 95% CI | Status |
-|---|---|---:|---:|---:|---|---|
-| Direct-10 rejudge | full | 20 | 77 | 26.0% | — | enriched baseline |
-| Direct MiMo v2.5-pro (old) | full | 29 | 77 | 37.7% | [27.3, 48.1] | title-only judging |
-| PGCR | full | 22 | 77 | 28.6% | [18.2, 39.0] | negative ablation |
-| BCS-50 | full | ? | 77 | ? | — | scoring in progress |
+### Replanning Analysis
+
+**Trigger:** BCS-50 does not beat Direct-10 on the full 77-target set.
+
+**Evidence:**
+- Direct-10 enriched: 20/77 = 26.0%
+- BCS-50: 16/77 = 20.8%
+- BCS-50 is 5.2pp WORSE than Direct-10
+
+**Decision:** Per `Plan/07`, this triggers pivot or stop.
+
+**Insufficiency/Risk:**
+- The core BCS hypothesis (more candidates → better Hit@10) is not supported by the data.
+- PGCR was already negative (28.6% with old judging, but needs enriched rejudge to confirm).
+- BCS-50 is also negative.
+- SE-BCS-50 could potentially help (structured/evolutionary approach), but the base BCS result suggests the problem may be deeper than candidate diversity.
+- The enriched judging is stricter (26.0% vs 37.7% title-only), which is itself a finding worth reporting.
+
+**Rollback condition:** If SE-BCS-50 also fails, the project should pivot to a negative-result / analysis paper.
+
+**Next action:** 
+1. Run the ACML audit script to get updated results table.
+2. Check if BCS-50 helps on specific target subsets (maybe helps on hard targets but hurts on easy ones).
+3. Consider running SE-BCS-50 as a last attempt.
+4. If SE-BCS-50 also fails, pivot to: "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+
+## Possible Pivot Framing
+
+If BCS and SE-BCS both fail, the paper becomes:
+
+**Title:** "When More Ideas Do Not Help: Failure Modes of Candidate Expansion for Scientific Ideation"
+
+**Story:**
+- We test whether generating more candidates and selecting quality/diversity improves Sci-Reasoning Hit@10.
+- Under enriched judging, direct generation (26.0%) outperforms BCS-50 (20.8%).
+- Pattern-conditioned generation (PGCR) also fails.
+- Enriched judging is significantly stricter than title-only judging (26.0% vs 37.7%).
+- This reveals fundamental limitations of candidate expansion for scientific ideation.
+
+This is still ACML-worthy if the analysis is clean and the negative result is well-structured.
 
 ## Phase 1 Completed Work
 
@@ -54,13 +78,12 @@ This file is the persistent handoff state for Claude Code sessions.
 - ACML results audit script created
 - All Phase 1 exit criteria met
 
-## API Issues Encountered
+## Phase 2 Completed Work
 
-- MiMo API calls sometimes hang indefinitely (CLOSE-WAIT connections)
-- Fixed: added threading-based 300s timeout in `scripts/mimo_client.py`
-- Generation calls take 100-300s each (much slower than expected)
-- Scoring calls also slow (~100s each)
-- Process auto-restart was needed multiple times during BCS-50 generation
+- Direct-10 enriched rejudge: 77/77, 20 hits, 26.0%
+- BCS-50 generation: 77/77 targets, 50 candidates each
+- BCS-50 scoring/selection: 77/77 targets
+- BCS-50 evaluation: 77/77, 16 hits, 20.8%
 
 ## Output Paths
 
@@ -73,24 +96,24 @@ This file is the persistent handoff state for Claude Code sessions.
 
 ### Phase 2
 - `scripts/14_direct10_rejudge.py`
-- `results/acml_direct10_rejudge_mimo_v25pro.json`
-- `results/bcs50_candidates_mimo_v25pro.jsonl`
-- `results/bcs50_selected_mimo_v25pro.jsonl` (in progress)
-- `results/bcs50_eval_mimo_v25pro.json` (not started)
+- `results/acml_direct10_rejudge_mimo_v25pro.json` (20 hits, 26.0%)
+- `results/bcs50_candidates_mimo_v25pro.jsonl` (77/77)
+- `results/bcs50_selected_mimo_v25pro.jsonl` (77/77)
+- `results/bcs50_eval_mimo_v25pro.json` (16 hits, 20.8%)
 
 ## Next Action
 
-1. Wait for BCS-50 scoring to complete (~12 hours).
-2. Run BCS-50 evaluation with enriched contributions.
-3. Run the ACML audit script to get updated results table.
-4. Reflect on results vs ACML submission bar.
-5. If BCS-50 beats Direct-10 by ≥5pp: proceed to SE-BCS-50 and selection ablations.
-6. If BCS-50 doesn't beat Direct-10: consider pivot to budget/analysis paper.
+1. Run ACML audit script to update results table.
+2. Analyze BCS-50 vs Direct-10 overlap: which targets does BCS help/hurt?
+3. Decide: SE-BCS-50 attempt, or pivot to negative-result paper.
+4. Update `Plan/RUN_STATE.md` with decision.
+5. Commit and push.
 
 ## Blockers
 
-- BCS-50 scoring is very slow (~12 hours for 77 targets × ~40 candidates each).
-- MiMo API latency is high (100-300s per call for generation, ~100s for scoring).
+- BCS-50 does not beat Direct-10 — replanning required.
+- ACML deadline is 2026-06-26 AoE (13 days from now).
+- Need to decide quickly: SE-BCS-50 attempt or pivot.
 
 ## Required Read Order (for next session)
 
